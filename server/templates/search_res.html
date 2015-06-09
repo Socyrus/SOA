@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<link rel="stylesheet" href= "stylesheets/bootstrap.min.css" >
+		<script src= "javascripts/jquery-1.11.1.min.js" ></script>
+		<script src= "javascripts/bootstrap.min.js" ></script>
+		
+		<link rel="stylesheet" href= "stylesheets/default_sheet.css" >
+		<link rel="stylesheet" href= "stylesheets/search_res.css" >
+		<script src= "javascripts/idol.js" ></script>
+		<link rel="stylesheet" href= "stylesheets/idol.css" >
+		<script src= "javascripts/search_res.js" ></script>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	</head>
+	<body>
+		{% include 'banner.html' %}
+		{% block banner %}{% endblock %}
+		<div class="container" id="main-wall">
+			<div class="search_info">
+				{{ search_input }}
+			</div>
+			<div class="search_person">
+				<h2>
+					<strong>用户</strong>
+				</h2>
+				<hr>
+				{% for user in users %}
+					<div class="person">
+						<div class="wb_face">
+							<img class="headicon_md img-circle" alt="icon" src="{{ user.image }}">
+						</div>
+						<div class="person_display">
+							<p class="person_name"> 
+								<strong><a href="#">{{ user.name }}</a> </strong>
+							</p>
+							<p class="person_addr">
+								<span class="span_block" id="addr">{{ user.location }}, {{ user.city }}</span>
+								<a id="weibo-link" href="#">去微博</a>
+							</p>
+							<p class="person_num">
+								关注
+								<span class="span_block" id="followee_num"> {{ user.num_followees }}</span> 
+								粉丝
+								<span class="span_block" id="follower_num"> {{ user.num_followers }}</span>
+							</p>
+							<p class="person_des">
+								{{ user.description }}
+							</p>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			
+			<div class="search_wb">
+				<h2>
+					<strong>微博</strong>
+				</h2>
+				<hr>
+				<div class="weibo">
+					{% for weibo in weibos %}
+						<div class="wb_face">
+							<img class="headicon_small img-circle" src="{{ weibo.user.image }}">
+						</div>
+						<div class="wb_display">
+							<div class="wb_info">
+								<p id="name"><strong>{{ weibo.user.name }}</strong></p>
+							</div>
+							<div class="wb_text">
+								{{ weibo.text }}
+							</div>
+							{% if weibo.original == 0 %}
+								<div class="wb_arrow">
+										<img id="arrow" src="images/arrow.jpg">
+								</div>
+								<div class="wb_expand">
+									
+									<div class="wb_mote">
+										<div class="wb_info">
+											<p id="name"><strong>{{ weibo.original_weibo.user.name }}</strong></p>
+										</div>
+										<div class="wb_text">
+											{{ weibo.original_weibo.text }}
+										</div>
+										<small class="wb_time">
+											{{ weibo.original_weibo.time }}
+										</small>
+									</div>
+								</div>
+							{% endif %}
+							<h6 class="wb_time"><small>
+								{{ weibo.time }}
+							</small></h6>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		
+		<div class="idol">
+			<div><img class="idol-img"></div>
+			<div class="idol-msg"></div>
+			<div class="idol-menu"></div>
+		</div>
+	</body>
+</html>

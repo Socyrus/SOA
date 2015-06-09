@@ -1,0 +1,65 @@
+body{
+	background-color: #e0e0e0;
+}
+#main-wall{
+	#background-color: #fff;
+}
+.head_img{
+	width:100%;
+}
+.navbar{
+	margin: 0 !important;
+}
+.display-block{
+	padding: 10px;
+	margin-bottom: 10px;
+	border-radius: 10px;
+	background-color: #fcfcfc;
+}
+.span_block{
+	margin-right: 15px;
+}
+.headicon_md{
+	height: 120px;
+	width: 120px;
+}
+.headicon_bg{
+	height: 200px;
+	width: 200px;
+}
+
+.wb_time{
+	margin: 0 !important;
+}
+.headicon_small{
+	height: 80px;
+	width: 80px;
+}
+.wb_face{
+	#margin: 0 !important;
+	float: left
+}
+.person_display{
+	padding: 12px 20px 12px 20px;
+	margin-left: 125px;
+}
+.wb_display{
+	padding: 12px 20px 12px 20px;
+	margin-left: 95px;
+}
+.wb_expand{
+	padding: 12px 20px 12px 20px;
+	background-color: #f0f0f0;
+	margin-bottom: 5px;
+}
+.test{
+	#position: relative;
+	width: 200px;
+}
+#user{
+	display: block;
+}
+.wb_arrow{
+	margin-left: 30px;
+	margin-bottom: -1px;
+}

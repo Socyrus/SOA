@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<link rel="stylesheet" href= "stylesheets/bootstrap.min.css" >
+		<script src= "javascripts/jquery-1.11.1.min.js" ></script>
+		<script src= "javascripts/bootstrap.min.js" ></script>
+		
+		<script src= "javascripts/wb.js" ></script>
+		<link rel="stylesheet" href= "stylesheets/wb.css" >
+		<link rel="stylesheet" href= "stylesheets/default_sheet.css" >
+		<script src= "javascripts/idol.js" ></script>
+		<link rel="stylesheet" href= "stylesheets/idol.css" >
+		<script src= "javascripts/Chart.min.js" ></script>
+		<script src= "javascripts/tree.js" ></script>
+		<script src= "javascripts/data.js" ></script>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	</head>
+	<body>
+		{% include 'banner.html' %}
+		{% block banner %}{% endblock %}
+		<div class="container" id="main-wall">
+			<div id="tree_node" style='display:none'> {{ tree_node }} </div>
+			<div class="wb">
+				<div class="weibo">
+					<div class="wb_face">
+						<img class="headicon_small img-circle" src="{{ weibo.user.image }}">
+					</div>
+					<div class="wb_display">
+						<div class="wb_info">
+							<p id="name"><strong>{{ weibo.user.name }}</strong></p>
+						</div>
+						<div class="wb_text">
+							{{ weibo.text }}
+						</div>
+						{% if weibo.original == 0 %}
+							<div class="wb_arrow">
+									<img id="arrow" src="images/arrow.jpg">
+							</div>
+							<div class="wb_expand">
+								
+								<div class="wb_mote">
+									<div class="wb_info">
+										<p id="name"><strong>{{ weibo.oringal_weibo.name }}</strong></p>
+									</div>
+									<div class="wb_text">
+										{{ weibo.original_weibo.text }}
+									</div>
+									<small class="wb_time">
+										{{ weibo.original_weibo.time }}
+									</small>
+								</div>
+							</div>
+						{% endif %}
+						<h6 class="wb_time"><small>
+							{{ weibo.time }}
+						</small></h6>
+					</div>
+				</div>
+			</div>
+			<div class="wb_tree text-center">
+				<h2><strong>微博转发树</strong></h2>
+				<canvas id="wb_tree"></canvas>
+			</div>
+			<div class="wb_data">
+				<div class="row">
+					<div class="col-md-6 text-center" id="div_pie_for_V">
+						<div class="V_v" style="display: none">{{ statistics.verified }}</div>
+						<div class="V_o" style="display: none">{{ statistics.others }}</div>
+						<canvas id="pie_for_V"></canvas>
+						<label>大V比例</label>
+					</div>
+					<div class="col-md-6 text-center" id="div_pie_for_gener">							
+						<div class="gender_m" style="display: none">{{ statistics.gender_m }}</div>
+						<div class="gemder_f" style="display: none">{{ statistics.gender_f }}</div>
+						<canvas id="pie_for_gender"></canvas>
+						<label>男女比例</label>
+					</div>
+				</div>
+				{% if statistics.keywords %}
+					<hr>
+					<div class="container-fluid">
+						{% for keyword in statistics.keywords %}
+							<span class="label label-info">{{ keyword.word }}</span>
+						{% endfor %}
+					</div>
+				{% endif %}
+			</data>
+		</div>
+	</body>
+	
+</html>

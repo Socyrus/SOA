@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		{% load staticfiles %}
+		<link rel="stylesheet" href="{% static "stylesheets/bootstrap.min.css" %}">
+		<script src="{% static "javascripts/jquery-1.11.1.min.js" %}"></script>
+		<script src="{% static "javascripts/bootstrap.min.js" %}"></script>
+		
+		<link rel="stylesheet" href="{% static "stylesheets/search.css" %}">
+		<link rel="stylesheet" href="{% static "stylesheets/default_sheet.css" %}">
+		<script src="{% static "javascripts/idol.js" %}"></script>
+		<link rel="stylesheet" href="{% static "stylesheets/idol.css" %">
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	</head>
+	<body>
+		{% include 'banner.html' %}
+		{% block banner %}{% endblock %}
+		<div class="container" id="main-wall">
+			<div class="logo text-center">
+				<h1>
+					SEARCH
+				</h1>
+			</div>
+			<form class="search" action="/search_post/" method="POST">
+				{% csrf_token %}
+				<div class="form-group" align="center">
+					<input class="form-control" id="search_input" name="input" placeholder="">
+					<button class="btn btn-primary" id="search_button" type="submit">Search!</button>
+				</div>
+			</form>
+			<hr/>
+			<div class="display">
+			
+			</div>
+		</div>
+	</body>
+	
+</html>

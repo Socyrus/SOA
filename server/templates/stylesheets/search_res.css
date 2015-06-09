@@ -1,0 +1,13 @@
+.search_info,
+.search_person,
+.search_wb{
+	background-color: #fff;
+	margin-bottom: 20px;
+	padding: 20px 30px 20px 30px;
+}
+.person{
+	padding: 10px 20px 10px 20px;
+}
+.person:hover{
+	background-color: #f0f0f0;
+}

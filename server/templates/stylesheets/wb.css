@@ -1,0 +1,13 @@
+.wb,
+.wb_tree,
+.wb_data{
+	margin-bottom: 20px;
+	background-color: #fff;
+	padding: 20px 35px 20px 35px;
+	display: block;
+}
+#pie_for_V,
+#pie_for_gender{
+	height: 100%;
+	width: 100%;
+}

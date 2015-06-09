@@ -1,0 +1,15 @@
+.person_detail{
+	
+	padding: 0 20px 0 20px;
+	margin-left: 220px;
+	height: 180px;
+	display: block;
+}
+.person_research,
+.person_wb,
+.person_info{
+	margin-bottom: 20px;
+	background-color: #fff;
+	padding: 20px 35px 20px 35px;
+	display: block;
+}
