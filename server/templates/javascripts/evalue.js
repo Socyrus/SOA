@@ -17,6 +17,9 @@ var scale = 1;
 var toDraw = [];
 var stack = [];
 
+var overpoint;
+var canvas;
+
 function buildTree() {
     tree.push({child:-1, x:-WINDOW_WIDTH / 2, y:-WINDOW_HEIGHT / 2, level:0, max:-1});
     for (var i = 0; i < points.length; i++) {
@@ -129,18 +132,20 @@ function findPoints(){
 
 window.onload = function(){
 	console.log('wb_evalue');
-    var canvas = document.getElementById('wb_evalue');
+    canvas = document.getElementById('wb_evalue');
     var context = canvas.getContext("2d");
 
     canvas.width = WINDOW_WIDTH;
     canvas.height = WINDOW_HEIGHT;
     context.translate( WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 );
 
+    overpoint = -1;
+
     var evaluate = document.getElementById('evaluat').innerHTML;
     evaluate = evaluate.replace(/'/g, '"');
     var oripoints = $.parseJSON(evaluate);
 
-    for (var i = 0; i < oripoints.length; ++i)
+    for (var i = 0; i < oripoints.length; ++i) 
         addPoint(oripoints[i].uid, oripoints[i].pos_x, oripoints[i].pos_y, oripoints[i].social_value);
 
     // addPoint(234,-20,30,0);
@@ -152,7 +157,7 @@ window.onload = function(){
 
     buildTree();
 
-    pic = new Image();
+    pic = new Image();  
     pic.src ="http://images.enet.com.cn/2013/0111/49/8697606.jpg";
 
     // render(context);
@@ -163,55 +168,70 @@ window.onload = function(){
         30
     );
 
-    // canvas.onmouseclick = MouseDown;
+    canvas.onmousedown = MouseDown;
     canvas.onmousewheel = MouseWheel;
+    canvas.onmousemove = MouseOver;
+    canvas.onmouseout = MouseOut;
 }
 
-/*function MouseDown(e) {
-    e = MousePos(e);
-    var dx, dy;
-    for (var i = 0; i < points.length; i++) {
-        dx = points[i].x - e.x;
-        dy = points[i].y - e.y;
-        if ((dx * dx) + (dy * dy) < RADIUS * RADIUS) {
-            //请求新页面
+function MouseOut(event) {
+    overpoint = -1;
+}
+
+function MouseOver(event) {
+    event = MousePos(event);
+    var x1, y1;
+    for (var i = 0; i < toDraw.length; ++i) {
+        x1 = points[toDraw[i]].x * scale;
+        y1 = points[toDraw[i]].y * scale;
+        x1 -= event.x;
+        y1 -= event.y;
+        if (x1 * x1 + y1 * y1 < RADIUS * RADIUS) {
+            overpoint = toDraw[i];
+            return;
         }
     }
+    overpoint = -1;
 }
 
-function handle(para){
+function MouseDown(event) {
+    if (overpoint != -1)
+        window.open("https://www.baidu.com/");
+}
 
+/*function handle(para){
+	
 }*/
 
 function MouseWheel(event) {
-    var delta = 0;
+    var delta = 0;  
 
-    if (!event)
-        event = window.event;
+    if (!event)  
+        event = window.event;  
     if (event.wheelDelta) {
-        delta = event.wheelDelta / 120;
-    } else if (event.detail) {
-        delta = -event.detail / 3;
-    }
+        delta = event.wheelDelta / 120;  
+    } else if (event.detail) {  
+        delta = -event.detail / 3;  
+    }  
 
     if (delta == 1)
         scale *= 2;
         //发送请求
     if (delta == -1)
         scale /= 2;
-
-    if (event.preventDefault)
-        event.preventDefault();
-    event.returnValue = false;
+    
+    if (event.preventDefault)  
+        event.preventDefault();  
+    event.returnValue = false; 
 }
 
-/*function MousePos(event) {
+function MousePos(event) {
     event = (event ? event : window.event);
     return {
         x: event.pageX - canvas.offsetLeft - WINDOW_WIDTH / 2,
         y: event.pageY - canvas.offsetTop - WINDOW_HEIGHT / 2
     }
-}*/
+}
 
 function getTemp(capital){
     var temp = Math.round(capital / MAXCAPITAL * 390);
@@ -238,8 +258,13 @@ function addPoint(pid, px, py, pcapital){
 
 function drawPoint(cxt, i, x, y){
     var gra = cxt.createRadialGradient(x, y, 0, x, y, RADIUS);
-    gra.addColorStop(0, "rgba(255, 0, 0, " + String(1 - points[i].spread / 30) + " )");
-    gra.addColorStop(0.7, "rgba(255, 0, 0, " + String(1 - points[i].spread / 30) + " )");
+    if (i == overpoint) {
+        gra.addColorStop(0, "rgb(255, 0, 0)");
+        gra.addColorStop(0.7, "rgb(255, 0, 0)");
+    } else {
+        gra.addColorStop(0, "rgba(255, 0, 0, " + String(1 - points[i].spread / 30) + " )");
+        gra.addColorStop(0.7, "rgba(255, 0, 0, " + String(1 - points[i].spread / 30) + " )");
+    }
     gra.addColorStop(1, "hsla(120, 50%, 0%, 0)");
     cxt.fillStyle = gra;
     cxt.beginPath();
@@ -258,7 +283,7 @@ function drawPulse(cxt, i, x, y) {
     cxt.beginPath();
     cxt.arc( x, y, RADIUS + points[i].spread * 2, 0, 2*Math.PI );
     cxt.closePath();
-    cxt.fill();
+    cxt.fill();   
 }
 
 function drawPulses(cxt) {
@@ -269,7 +294,8 @@ function drawPulses(cxt) {
 
 function updatePulses() {
     for (var i = 0; i < toDraw.length; ++i) {
-        if (points[toDraw[i]].bigger && points[toDraw[i]].ang < circlerotation)
+        if (points[toDraw[i]].bigger && points[toDraw[i]].ang < circlerotation || 
+            toDraw[i] == overpoint && points[toDraw[i]].spread == 30)
             points[toDraw[i]].spread = 0;
         if (points[toDraw[i]].spread < 30)
             points[toDraw[i]].spread++;
@@ -292,18 +318,18 @@ function updatePulses() {
 function render(cxt){
 
     findPoints();
-
+    
     cxt.clearRect( -WINDOW_WIDTH / 2, -WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT );
     cxt.fillStyle = 'rgb(0, 0, 0)';
-    cxt.fillRect( -WINDOW_WIDTH / 2, -WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT );
+    cxt.fillRect( -WINDOW_WIDTH / 2, -WINDOW_HEIGHT / 2, WINDOW_WIDTH, WINDOW_HEIGHT );  
 
     if (pic.complete) {
         cxt.drawImage(pic, -138, -144);
     }
 
     cxt.save();
-    cxt.shadowBlur = circleblur;
-    cxt.shadowColor = 'hsla('+circlehue+', 90%, 70%, 1)';
+    cxt.shadowBlur = circleblur; 
+    cxt.shadowColor = 'hsla('+circlehue+', 90%, 70%, 1)'; 
     cxt.lineCap = 'round';
 
     updateCircle();
@@ -366,7 +392,7 @@ function updateCircle() {
     if(circlerotation < 360){
         circlerotation += circlespeed;
     } else {
-        circlerotation = 0;
+        circlerotation = 0; 
     }
 }
 
@@ -415,7 +441,7 @@ function renderCircleBorder(cxt, r) {
         gradient3.addColorStop(i * i / 100, 'hsla(330, 100%, 100%, 1)');
         gradient3.addColorStop(1, 'hsla(330, 100%, 100%, 0)');
         cxt.fillStyle = gradient3;
-        cxt.fill();
+        cxt.fill();     
     }
     cxt.restore();
 }
@@ -432,7 +458,7 @@ function renderCircleFlare2(cxt) {
     gradient4.addColorStop(0, 'hsla(30, 100%, 50%, .2)');
     gradient4.addColorStop(1, 'hsla(30, 100%, 50%, 0)');
     cxt.fillStyle = gradient4;
-    cxt.fill();
+    cxt.fill();     
     cxt.restore();
 }
 
@@ -480,5 +506,5 @@ function clear() {
     cxt.globalCompositeOperation = 'destination-out';
     cxt.fillStyle = 'rgba(0, 0, 0, .1)';
     cxt.fillRect(0, 0, cw, ch);
-    cxt.globalCompositeOperation = 'lighter';
+    cxt.globalCompositeOperation = 'lighter';     
 } */
